@@ -29,18 +29,30 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
+//for production
+app.get('/',(req,res)=>{
+  res.send('Server started in production');
+})
+
 // Database connection and server 
 AppDataSource.initialize()
   .then(async () => {
-    console.log('Database connected successfully');
+    console.log('\n=== Database & Server Status ===');
+    console.log('✅ Database Connection: SUCCESS');
+    console.log(`📦 Database: ${process.env.DB_NAME}`);
     
     // Creating demo user
     await createInitialUser();
+    console.log('👤 Demo User: Created');
     
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`🚀 Server: Running on port ${PORT}`);
+      console.log('===============================\n');
     });
   })
   .catch((error) => {
-    console.error('Error connecting to database:', error);
+    console.log('\n=== Error Report ===');
+    console.log('❌ Database Connection: FAILED');
+    console.error('Error details:', error);
+    console.log('==================\n');
   }); 

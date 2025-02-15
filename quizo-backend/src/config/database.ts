@@ -18,4 +18,16 @@ export const AppDataSource = new DataSource({
   entities: [User, Quiz],
   subscribers: [],
   migrations: [],
-}); 
+});
+
+// Add connection status handlers
+AppDataSource.initialize()
+  .then(() => {
+    console.log('✅ Database Connection: SUCCESS');
+    console.log(`📦 Connected to: ${process.env.DB_NAME}`);
+    console.log(`🛜 Host: ${process.env.DB_HOST}:${process.env.DB_PORT}`);
+  })
+  .catch((error) => {
+    console.log('❌ Database Connection: FAILED');
+    console.error('Error details:', error);
+  }); 
