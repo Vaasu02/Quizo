@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../hooks/use-toast';
 import { LoginCredentials } from '../types/auth.types';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -9,15 +10,24 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 
 const LoginPage = () => {
   const { login } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const form = useForm<LoginCredentials>();
 
   const onSubmit = async (data: LoginCredentials) => {
     try {
       await login(data);
+      toast({
+        title: "Success",
+        description: "Logged in successfully!",
+      });
       navigate('/');
     } catch (error) {
-      console.error('Login failed:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to login. Please check your credentials.",
+      });
     }
   };
 

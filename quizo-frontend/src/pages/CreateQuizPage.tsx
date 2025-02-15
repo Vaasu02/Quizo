@@ -3,18 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import { QuizFormData } from '../types/quiz.types';
 import { quizApi } from '../services/api';
 import QuizForm from '../components/quiz/QuizForm';
+import { useToast } from '../hooks/use-toast';
 
 const CreateQuizPage = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (data: QuizFormData) => {
     try {
       setIsSubmitting(true);
       await quizApi.create(data);
+      toast({
+        title: "Success",
+        description: "Quiz created successfully!",
+      });
       navigate('/');
     } catch (error) {
-      console.error('Failed to create quiz:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to create quiz. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }

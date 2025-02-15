@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import CreateQuizPage from './pages/CreateQuizPage';
 import EditQuizPage from './pages/EditQuizPage';
+import { Toaster } from './components/ui/toaster';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
               <Route path="/quiz/edit/:id" element={<EditQuizPage />} />
             </Route>
           </Routes>
+          <Toaster />
         </ToastContextProvider>
       </AuthProvider>
     </BrowserRouter>

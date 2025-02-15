@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Quiz, QuizFormData } from '../types/quiz.types';
 import { quizApi } from '../services/api';
 import QuizForm from '../components/quiz/QuizForm';
+import { useToast } from '../hooks/use-toast';
 
 const EditQuizPage = () => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
@@ -10,6 +11,7 @@ const EditQuizPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchQuiz();
@@ -32,9 +34,17 @@ const EditQuizPage = () => {
       if (!id) return;
       setIsSubmitting(true);
       await quizApi.update(parseInt(id), data);
+      toast({
+        title: "Success",
+        description: "Quiz updated successfully!",
+      });
       navigate('/');
     } catch (error) {
-      console.error('Failed to update quiz:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update quiz. Please try again.",
+      });
     } finally {
       setIsSubmitting(false);
     }

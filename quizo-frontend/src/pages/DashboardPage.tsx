@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../hooks/use-toast';
 import { Quiz } from '../types/quiz.types';
 import { quizApi } from '../services/api';
 import QuizCard from '../components/quiz/QuizCard';
@@ -10,6 +11,7 @@ const DashboardPage = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchQuizzes();
@@ -34,8 +36,16 @@ const DashboardPage = () => {
     try {
       await quizApi.delete(id);
       setQuizzes(quizzes.filter(quiz => quiz.id !== id));
+      toast({
+        title: "Success",
+        description: "Quiz deleted successfully!",
+      });
     } catch (error) {
-      console.error('Failed to delete quiz:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete quiz. Please try again.",
+      });
     }
   };
 
