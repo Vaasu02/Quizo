@@ -3,7 +3,7 @@ import { LoginCredentials } from '../types/auth.types';
 import { QuizFormData } from '../types/quiz.types';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: 'https://quizo-j6s3.onrender.com/api'
 });
 
 api.interceptors.request.use((config) => {
