@@ -7,15 +7,19 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../components/ui/form';
+import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
 const LoginPage = () => {
   const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const form = useForm<LoginCredentials>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: LoginCredentials) => {
     try {
+      setIsLoading(true);
       await login(data);
       toast({
         title: "Success",
@@ -28,6 +32,8 @@ const LoginPage = () => {
         title: "Error",
         description: "Failed to login. Please check your credentials.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -66,8 +72,19 @@ const LoginPage = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Login
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  'Login'
+                )}
               </Button>
             </form>
           </Form>
